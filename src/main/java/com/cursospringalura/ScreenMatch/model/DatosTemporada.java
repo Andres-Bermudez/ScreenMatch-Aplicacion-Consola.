@@ -13,4 +13,9 @@ public record DatosTemporada(
         @JsonAlias("Episodes")
         List<DatosEpisodio> episodios
 ) {
+        @Override
+        public String toString() {
+                return "\nNumero Temporada: " + numeroTemporada +
+                       "\nEpisodios: " + episodios.size();
+        }
 }

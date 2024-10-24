@@ -15,4 +15,11 @@ public record DatosSerie(
         @JsonAlias("imdbRating")
         String evaluacion
 ) {
+        @Override
+        public String toString() {
+                return "\nDATOS GENERALES DE LA SERIE:" +
+                       "\nTitulo: " + titulo +
+                       "\nTotalTemporadas: " + totalTemporadas +
+                       "\nEvaluacion: " + evaluacion;
+        }
 }

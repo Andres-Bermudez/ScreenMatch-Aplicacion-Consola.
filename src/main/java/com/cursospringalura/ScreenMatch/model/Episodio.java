@@ -36,9 +36,9 @@ public class Episodio {
     public String toString() {
         return "\nTemporada: " + temporada +
                 "\nTitulo: " + titulo +
-                "\nNumeroEpisodio: " + numeroEpisodio +
+                "\nNumero Episodio: " + numeroEpisodio +
                 "\nEvaluacion: " + evaluacion +
-                "\nFechaLanzamiento: " + fechaLanzamiento;
+                "\nFecha de lanzamiento: " + fechaLanzamiento;
     }
 
     public void setTemporada(Integer temporada) {

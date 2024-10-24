@@ -17,4 +17,11 @@ public record DatosEpisodio(
         @JsonAlias("Released")
         String fechaLanzamiento
 ) {
+        @Override
+        public String toString() {
+                return "\nTitulo: " + titulo +
+                        "\nNumero Episodio: " + numeroEpisodio +
+                        "\nEvaluacion: " + evaluacion +
+                        "\nFecha de lanzamiento: " + fechaLanzamiento;
+        }
 }
