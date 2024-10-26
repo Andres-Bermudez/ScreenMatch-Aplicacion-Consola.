@@ -1,4 +1,4 @@
-package com.cursospringalura.ScreenMatch.menu;
+package com.cursospringalura.ScreenMatch.principal;
 
 import com.cursospringalura.ScreenMatch.autenticacion.DatosAutenticacion;
 import com.cursospringalura.ScreenMatch.model.DatosEpisodio;
@@ -12,11 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Menu extends DatosAutenticacion {
+public class Main extends DatosAutenticacion {
     private final ConvertirDatos convertirDatos = new ConvertirDatos();
     private final ConsumoAPI consumoAPI = new ConsumoAPI();
     private final DatosAutenticacion datosAutenticacion = new DatosAutenticacion();
-
     private final String urlBase = "https://www.omdbapi.com/?t=";
     private final String apiKey = datosAutenticacion.getApiKey();
 
@@ -30,9 +29,10 @@ public class Menu extends DatosAutenticacion {
                                     3. Buscar Top 5 de los episodios de una serie.
                                     4. Buscar los datos de todos los episodios de todas las temporadas de una serie.
                                     5. Buscar episodios de una serie por fecha.
+                                    6. Buscar un episodio de una serie por la primera coincidencia encontrada.
                                     0. Salir
                                """;
-        while (seleccionUsuario < 0 || seleccionUsuario > 5) {
+        while (seleccionUsuario < 0 || seleccionUsuario > 6) {
             System.out.print(menuPrincipal + "\nTu eleccion: ");
             try {
                  seleccionUsuario = sc.nextInt();
@@ -61,6 +61,9 @@ public class Menu extends DatosAutenticacion {
                 break;
             case 5:
                 buscarEpisodiosDeUnaSeriePorFecha();
+                break;
+            case 6:
+                busquedaEpisodioPorFraccionTitulo();
                 break;
             default:
                 System.out.println("\nLa opcion que elegiste no existe");
@@ -163,5 +166,25 @@ public class Menu extends DatosAutenticacion {
                         "\nEpisodio: " + e.getNumeroEpisodio() +
                         "\nFecha de lanzamiento: " + e.getFechaLanzamiento().format(dtf)
                 ));
+    }
+
+    private void busquedaEpisodioPorFraccionTitulo() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("\nEscribe el episodio que estas buscando: ");
+        String episodioBuscado = sc.nextLine();
+
+        List<Episodio> episodios = verDatosDeTodosLosEpisodios(tomarNombreSerie());
+
+        // Filtrando la primera coincidencia del titulo encontrado
+        Optional<Episodio> episodioEncontrado = episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(episodioBuscado.toUpperCase()))
+                .findFirst();
+
+        if (episodioEncontrado.isPresent()) {
+            System.out.println("\nEpisodio Encontrado: \n" + episodioEncontrado.get());
+        } else {
+            System.out.println("\nEl episodio NO fue encontrado.");
+        }
     }
 }

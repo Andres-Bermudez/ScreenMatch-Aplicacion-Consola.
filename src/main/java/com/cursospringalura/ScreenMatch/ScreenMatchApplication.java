@@ -1,6 +1,6 @@
 package com.cursospringalura.ScreenMatch;
 
-import com.cursospringalura.ScreenMatch.menu.Menu;
+import com.cursospringalura.ScreenMatch.principal.Main;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +14,7 @@ public class ScreenMatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Menu menu = new Menu();
+		Main menu = new Main();
 		menu.mostrarMenu();
 	}
 }
