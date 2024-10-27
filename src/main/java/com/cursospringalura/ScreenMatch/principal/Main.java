@@ -30,9 +30,11 @@ public class Main extends DatosAutenticacion {
                                     4. Buscar los datos de todos los episodios de todas las temporadas de una serie.
                                     5. Buscar episodios de una serie por fecha.
                                     6. Buscar un episodio de una serie por la primera coincidencia encontrada.
+                                    7. Ver calificaciones de las temporadas de una serie.
+                                    8. Ver estadisticas de una serie.
                                     0. Salir
                                """;
-        while (seleccionUsuario < 0 || seleccionUsuario > 6) {
+        while (seleccionUsuario < 0 || seleccionUsuario > 8) {
             System.out.print(menuPrincipal + "\nTu eleccion: ");
             try {
                  seleccionUsuario = sc.nextInt();
@@ -64,6 +66,12 @@ public class Main extends DatosAutenticacion {
                 break;
             case 6:
                 busquedaEpisodioPorFraccionTitulo();
+                break;
+            case 7:
+                evaluacionesPorTemporada(tomarNombreSerie());
+                break;
+            case 8:
+                verEstadisticasSerie(tomarNombreSerie());
                 break;
             default:
                 System.out.println("\nLa opcion que elegiste no existe");
@@ -113,11 +121,10 @@ public class Main extends DatosAutenticacion {
     }
 
     private void verTop5Episodios(String nombreSerie) {
-        List<DatosTemporada> temporadas = buscarDatosSeriePorTemporada(nombreSerie);
 
         System.out.println("\nTOP 5 EPISODIOS CON MEJOR CALIFICACION:");
         // Convertir toda la informacion a una lista de tipo DatosEpisodio
-        List<DatosEpisodio> datosEpisodios = temporadas.stream()
+        List<DatosEpisodio> datosEpisodios = buscarDatosSeriePorTemporada(nombreSerie).stream()
                 .flatMap(t -> t.episodios().stream()).collect(Collectors.toList());
 
         // Mostrar Top 5 episodios de la serie
@@ -131,10 +138,8 @@ public class Main extends DatosAutenticacion {
     private List<Episodio> verDatosDeTodosLosEpisodios(String nombreSerie) {
         System.out.println("\nBUSCANDO DATOS DE LOS EPISODIOS DE LA SERIE:");
 
-        List<DatosTemporada> temporadas = buscarDatosSeriePorTemporada(nombreSerie);
-
         // Convirtiendo los datos a una lista de tipo Episodio
-        List<Episodio> episodios = temporadas.stream()
+        List<Episodio> episodios = buscarDatosSeriePorTemporada(nombreSerie).stream()
                 .flatMap(t -> t.episodios().stream()
                         .map(d -> new Episodio(t.numeroTemporada(), d)))
                 .collect(Collectors.toList());
@@ -174,10 +179,8 @@ public class Main extends DatosAutenticacion {
         System.out.print("\nEscribe el episodio que estas buscando: ");
         String episodioBuscado = sc.nextLine();
 
-        List<Episodio> episodios = verDatosDeTodosLosEpisodios(tomarNombreSerie());
-
         // Filtrando la primera coincidencia del titulo encontrado
-        Optional<Episodio> episodioEncontrado = episodios.stream()
+        Optional<Episodio> episodioEncontrado = verDatosDeTodosLosEpisodios(tomarNombreSerie()).stream()
                 .filter(e -> e.getTitulo().toUpperCase().contains(episodioBuscado.toUpperCase()))
                 .findFirst();
 
@@ -186,5 +189,30 @@ public class Main extends DatosAutenticacion {
         } else {
             System.out.println("\nEl episodio NO fue encontrado.");
         }
+    }
+
+    private void evaluacionesPorTemporada(String nombreSerie) {
+        Map<Integer, Double> evaluaciones = verDatosDeTodosLosEpisodios(nombreSerie).stream()
+                .filter(e -> e.getEvaluacion() > 0)
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                        Collectors.averagingDouble(Episodio::getEvaluacion)));
+
+        for (Map.Entry<Integer, Double> entry : evaluaciones.entrySet()) {
+            Integer clave = entry.getKey();
+            Double valor = entry.getValue();
+
+            System.out.println("\nTemporada: " + clave
+                    + "\nCalificacion: " + valor);
+        }
+    }
+
+    private void verEstadisticasSerie(String nombreSerie) {
+        DoubleSummaryStatistics statistics = verDatosDeTodosLosEpisodios(nombreSerie).stream()
+                .filter(e -> e.getEvaluacion() > 0)
+                .collect(Collectors.summarizingDouble(Episodio::getEvaluacion));
+
+        System.out.println("\nPromedio evaluciones: " + statistics.getAverage()
+                         + "\nMaxima calificacion obtenida de un episodio: " + statistics.getMax()
+                         + "\nCalificacion mas baja obtenida de un episodio: " + statistics.getMin());
     }
 }

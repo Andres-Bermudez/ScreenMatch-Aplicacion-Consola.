@@ -3,8 +3,25 @@
 ![Consultando datos serie](./imagenes/inicio.png)
 
 ## Descripcion:
-Primer proyecto en Java con Spring Boot, curso de Alura, programa
+Primer proyecto en Java con Spring Boot del curso de Alura, programa
 ONE (Oracle Next Education):
+
+Esta aplicación desarrollada en Java con Spring Boot permite realizar búsquedas 
+de series mediante la API de OMDb (https://www.omdbapi.com) para obtener sus datos. 
+
+Con esta herramienta, los usuarios pueden buscar series por nombre, realizar búsquedas por fecha, 
+visualizar estadísticas de cada temporada, consultar el top 5 de episodios 
+mejor calificados de una serie, entre otras funciones similares. 
+
+Además, se emplean técnicas de programación funcional y se aprovecha la API de Streams de Java, 
+permitiendo ejecutar operaciones intermedias y convertir los resultados en 
+colecciones específicas para facilitar el filtrado y búsqueda de series.
+<br><br>
+
+#### Informacion de todos los episodios de una serie
+![Informacion Episodios](./imagenes/episodiosSerie.png)
+
+## Objetivos:
 
 #### Creacion de proyectos con Spring Initializr:
 - Creacion de un proyecto con Spring Boot, agregando Maven como gestor de
@@ -19,3 +36,20 @@ https://www.omdbapi.com
 
 #### Introducción a la Programación Funcional en Java: 
 - Aplicación de streams para manipular colecciones de datos de manera eficiente.
+
+#### Uso de bibliotecas para manipulacion de datos y calculo de estadisticas:
+- DateTimeFormatter
+- Optional
+- DoubleSummaryStatistics
+<br><br>
+
+#### Busqueda de datos de una serie por fecha:
+![Busqueda por fecha](./imagenes/busquedaPorFecha.png)
+
+### Tecnologias y herramientas utilizadas:
+1. Java como lenguaje de programacion.
+2. Maven como gestor de dependencias.
+3. Spring Boot como framework.
+4. Postman para ejecutar pruebas a la API.
+5. Git y GitHub para el control de versiones.
+6. API de OMDb para obtener los datos.
