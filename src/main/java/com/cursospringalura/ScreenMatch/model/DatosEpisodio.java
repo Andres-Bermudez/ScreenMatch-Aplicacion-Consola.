@@ -19,9 +19,9 @@ public record DatosEpisodio(
 ) {
         @Override
         public String toString() {
-                return "\nTitulo: " + titulo +
-                        "\nNumero Episodio: " + numeroEpisodio +
-                        "\nEvaluacion: " + evaluacion +
-                        "\nFecha de lanzamiento: " + fechaLanzamiento;
+                return "\nNumero Episodio: " + numeroEpisodio +
+                        "\nTitulo: " + titulo +
+                        "\nFecha de lanzamiento: " + fechaLanzamiento +
+                        "\nEvaluacion: " + evaluacion;
         }
 }
