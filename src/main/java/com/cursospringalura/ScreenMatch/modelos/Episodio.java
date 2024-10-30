@@ -1,4 +1,4 @@
-package com.cursospringalura.ScreenMatch.model;
+package com.cursospringalura.ScreenMatch.modelos;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -10,19 +10,19 @@ public class Episodio {
     private Double evaluacion;
     private LocalDate fechaLanzamiento;
 
-    public Episodio(Integer numero, DatosEpisodio d) {
+    public Episodio(Integer numero, DatosEpisodio episodio) {
         this.temporada = numero;
-        this.titulo = d.titulo();
-        this.numeroEpisodio = d.numeroEpisodio();
+        this.titulo = episodio.titulo();
+        this.numeroEpisodio = episodio.numeroEpisodio();
 
         try {
-            this.evaluacion = Double.valueOf(d.evaluacion());
+            this.evaluacion = Double.valueOf(episodio.evaluacion());
         } catch (NumberFormatException e) {
             this.evaluacion = 0.0;
         }
 
         try {
-            this.fechaLanzamiento = LocalDate.parse(d.fechaLanzamiento());
+            this.fechaLanzamiento = LocalDate.parse(episodio.fechaLanzamiento());
         } catch (DateTimeParseException e) {
             this.fechaLanzamiento = null;
         }

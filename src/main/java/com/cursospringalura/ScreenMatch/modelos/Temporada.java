@@ -1,11 +1,11 @@
-package com.cursospringalura.ScreenMatch.model;
+package com.cursospringalura.ScreenMatch.modelos;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record DatosTemporada(
+public record Temporada(
 
         @JsonAlias("Season")
         Integer numeroTemporada,

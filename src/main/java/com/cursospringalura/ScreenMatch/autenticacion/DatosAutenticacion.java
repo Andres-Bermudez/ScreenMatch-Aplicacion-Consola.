@@ -1,9 +1,14 @@
 package com.cursospringalura.ScreenMatch.autenticacion;
 
 public class DatosAutenticacion {
-    private String apiKey = "2b182f16";
+    private String apiKeyOMDb = "2b182f16";
+    private String apiKeyGemini = "AIzaSyDOsfdPpR93OtxxozTwdtPAiNX5ogJSR44";
 
     public String getApiKey() {
-        return apiKey;
+        return apiKeyOMDb;
+    }
+
+    public String getApiKeyGemini() {
+        return apiKeyGemini;
     }
 }

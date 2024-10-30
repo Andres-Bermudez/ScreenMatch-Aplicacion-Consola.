@@ -1,4 +1,4 @@
-package com.cursospringalura.ScreenMatch.service;
+package com.cursospringalura.ScreenMatch.conversiondatos;
 
 public interface IConvertirDatos {
 

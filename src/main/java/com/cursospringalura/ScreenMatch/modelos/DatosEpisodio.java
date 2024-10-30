@@ -1,4 +1,4 @@
-package com.cursospringalura.ScreenMatch.model;
+package com.cursospringalura.ScreenMatch.modelos;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

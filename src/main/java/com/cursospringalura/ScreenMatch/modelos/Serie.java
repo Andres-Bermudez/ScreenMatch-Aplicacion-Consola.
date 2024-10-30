@@ -1,10 +1,10 @@
-package com.cursospringalura.ScreenMatch.model;
+package com.cursospringalura.ScreenMatch.modelos;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record DatosSerie(
+public record Serie(
 
         @JsonAlias("Title")
         String titulo,
@@ -13,7 +13,7 @@ public record DatosSerie(
         String year,
 
         @JsonAlias("Rated")
-        String Calificada,
+        String calificada,
 
         @JsonAlias("Released")
         String fechaPublicacion,
@@ -57,12 +57,13 @@ public record DatosSerie(
         @JsonAlias("imdbVotes")
         String totalVotos
 ) {
+
         @Override
         public String toString() {
-                return "\nDATOS DE LA SERIE: " +
+                return "\nSERIE: " +
                         "\nTitulo: " + titulo +
                         "\nAño: " + year +
-                        "\nCalificada: " + Calificada +
+                        "\ncalificada: " + calificada +
                         "\nFecha de publicacion: " + fechaPublicacion +
                         "\nDuracion: " + duracion +
                         "\nGenero: " + genero +

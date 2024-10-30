@@ -1,8 +1,6 @@
 package com.cursospringalura.ScreenMatch.principal;
 
 import com.cursospringalura.ScreenMatch.autenticacion.DatosAutenticacion;
-import com.cursospringalura.ScreenMatch.model.DatosTemporada;
-import com.cursospringalura.ScreenMatch.model.Episodio;
 import java.util.*;
 
 public class Menu extends DatosAutenticacion {
@@ -20,9 +18,10 @@ public class Menu extends DatosAutenticacion {
                                     6. Buscar un episodio de una serie por la primera coincidencia encontrada.
                                     7. Ver calificaciones de las temporadas de una serie.
                                     8. Ver estadisticas de una serie.
+                                    9. Series almacenadas.
                                     0. Salir
                                """;
-        while (seleccionUsuario < 0 || seleccionUsuario > 8) {
+        while (seleccionUsuario < 0 || seleccionUsuario > 9) {
             System.out.print(menuPrincipal + "\nTu eleccion: ");
             try {
                  seleccionUsuario = sc.nextInt();
@@ -41,8 +40,7 @@ public class Menu extends DatosAutenticacion {
                 break;
             case 2:
                 System.out.println("\nBuscando datos de las temporadas de la serie.....");
-                List<DatosTemporada> temporadas = MetodosBusqueda.buscarDatosSeriePorTemporada(tomarNombreSerie());
-                temporadas.forEach(System.out::println);
+                MetodosBusqueda.buscarDatosSeriePorTemporada(tomarNombreSerie()).forEach(System.out::println);
                 break;
             case 3:
                 System.out.println("\nBuscando top 5 episodios de una serie.....");
@@ -50,8 +48,7 @@ public class Menu extends DatosAutenticacion {
                 break;
             case 4:
                 System.out.println("\nBuscando datos de todos los episodios de la serie.....");
-                List<Episodio> episodios = MetodosBusqueda.verDatosDeTodosLosEpisodios(tomarNombreSerie());
-                episodios.forEach(System.out::println);
+                MetodosBusqueda.verDatosDeTodosLosEpisodios(tomarNombreSerie()).forEach(System.out::println);
                 break;
             case 5:
                 System.out.println("\nBuscando datos de una serie por fecha.....");
@@ -68,6 +65,9 @@ public class Menu extends DatosAutenticacion {
             case 8:
                 System.out.println("\nCalculando datos de la serie.....");
                 MetodosBusqueda.verEstadisticasSerie(tomarNombreSerie());
+                break;
+            case 9:
+                MetodosBusqueda.consultasAlmacenadas();
                 break;
             default:
                 System.out.println("\nLa opcion que elegiste no existe");

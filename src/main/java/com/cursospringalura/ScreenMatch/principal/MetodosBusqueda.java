@@ -1,12 +1,10 @@
 package com.cursospringalura.ScreenMatch.principal;
 
 import com.cursospringalura.ScreenMatch.autenticacion.DatosAutenticacion;
-import com.cursospringalura.ScreenMatch.model.DatosEpisodio;
-import com.cursospringalura.ScreenMatch.model.DatosSerie;
-import com.cursospringalura.ScreenMatch.model.DatosTemporada;
-import com.cursospringalura.ScreenMatch.model.Episodio;
-import com.cursospringalura.ScreenMatch.service.ConsumoAPI;
-import com.cursospringalura.ScreenMatch.service.ConvertirDatos;
+import com.cursospringalura.ScreenMatch.modelos.*;
+import com.cursospringalura.ScreenMatch.servicios.ConsultaOMDb;
+import com.cursospringalura.ScreenMatch.conversiondatos.ConvertirDatos;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -15,29 +13,45 @@ import java.util.stream.Collectors;
 public class MetodosBusqueda extends DatosAutenticacion {
 
     private final static ConvertirDatos convertirDatos = new ConvertirDatos();
-    private final static ConsumoAPI consumoAPI = new ConsumoAPI();
+    private final static ConsultaOMDb consultaOmdb = new ConsultaOMDb();
     private final static DatosAutenticacion datosAutenticacion = new DatosAutenticacion();
     private final static String urlBase = "https://www.omdbapi.com/?t=";
     private final static String apiKey = datosAutenticacion.getApiKey();
+    private final static List<DatosSerie> seriesBuscadas = new ArrayList<>();
 
-    public static DatosSerie buscarDatosGeneralesSerie(String nombreSerie) {
+    public static Serie buscarDatosGeneralesSerie(String nombreSerie) {
         String url = urlBase + nombreSerie + "&apikey=" + apiKey;
 
         // Busqueda de los datos generales de la serie
-        String json = consumoAPI.obtenerDatos(url);
+        String json = consultaOmdb.obtenerDatos(url);
 
-        return convertirDatos.obtenerDatos(json, DatosSerie.class);
+        // Procedimiento para convertir el JSON en un objeto Java
+        ObjectMapper objectMapper = new ObjectMapper();
+        Serie serie = null;
+        try {
+            // Conversion del JSON a un objeto Java
+            serie = objectMapper.readValue(json, Serie.class);
+
+            // Conversion del objeto para almacenarlo con algunas cambios como traduccion de sus datos.
+            DatosSerie datosSerie = new DatosSerie(serie);
+            seriesBuscadas.add(datosSerie); // Añadir el objeto a una ArrayList.
+
+        } catch (Exception e) {
+            System.out.println("\nNo se pudo convertir el JSON de la serie en el objeto solicitado.");
+            System.out.println(e.getMessage());
+        }
+        return convertirDatos.obtenerDatos(json, Serie.class);
     }
 
-    public static List<DatosTemporada> buscarDatosSeriePorTemporada(String nombreSerie) {
-        DatosSerie datosSerie = buscarDatosGeneralesSerie(nombreSerie);
+    public static List<Temporada> buscarDatosSeriePorTemporada(String nombreSerie) {
+        Serie serie = buscarDatosGeneralesSerie(nombreSerie);
 
-        List<DatosTemporada> temporadas = new ArrayList<>();
+        List<Temporada> temporadas = new ArrayList<>();
 
         try {
-            for (int i = 1; i <= datosSerie.totalTemporadas(); i++) {
-                String url = consumoAPI.obtenerDatos(urlBase + nombreSerie + "&Season=" + i + "&apikey=" + apiKey);
-                var datosTemporadas = convertirDatos.obtenerDatos(url, DatosTemporada.class);
+            for (int i = 1; i <= serie.totalTemporadas(); i++) {
+                String url = consultaOmdb.obtenerDatos(urlBase + nombreSerie + "&Season=" + i + "&apikey=" + apiKey);
+                var datosTemporadas = convertirDatos.obtenerDatos(url, Temporada.class);
                 temporadas.add(datosTemporadas);
             }
         } catch (NullPointerException e) {
@@ -137,5 +151,14 @@ public class MetodosBusqueda extends DatosAutenticacion {
         System.out.println("\nPromedio evaluaciones: " + statistics.getAverage()
                 + "\nMaxima calificacion obtenida de un episodio: " + statistics.getMax()
                 + "\nCalificacion mas baja obtenida de un episodio: " + statistics.getMin());
+    }
+
+    public static void consultasAlmacenadas() {
+        if (seriesBuscadas.isEmpty()) {
+            System.out.println("\nLa lista de datos esta vacia.");
+        } else {
+            System.out.println("\nTOTAL DE SERIES ALMACENADAS: " + seriesBuscadas.size());
+            seriesBuscadas.forEach(System.out::println);
+        }
     }
 }

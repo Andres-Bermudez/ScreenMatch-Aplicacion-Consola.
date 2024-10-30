@@ -14,7 +14,7 @@ public class ScreenMatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-			Menu menu = new Menu();
+		Menu menu = new Menu();
 		while (true) {
 			menu.mostrarMenu();
 		}
