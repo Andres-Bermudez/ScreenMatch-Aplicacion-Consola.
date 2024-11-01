@@ -27,11 +27,13 @@ public class Menu extends DatosAutenticacion {
                  seleccionUsuario = sc.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("\nEsta opcion no esta disponible.");
+                sc.nextLine();
             }
         }
 
         switch (seleccionUsuario) {
             case 0:
+                System.out.println("\nSALIENDO DE LA APLICACION.....\n");
                 System.exit(0);
                 break;
             case 1:

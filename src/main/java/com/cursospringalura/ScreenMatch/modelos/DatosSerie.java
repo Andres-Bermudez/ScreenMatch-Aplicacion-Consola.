@@ -2,30 +2,70 @@ package com.cursospringalura.ScreenMatch.modelos;
 
 import com.cursospringalura.ScreenMatch.servicios.gemini.ConsultaGemini;
 import com.cursospringalura.ScreenMatch.servicios.gemini.modelos.ResponseData;
+import jakarta.persistence.*;
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "series")
 public class DatosSerie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
     private String titulo;
-    private String year;
+
+    @Column(nullable = false)
+    private String año;
+
+    @Column
     private String calificada;
+
+    @Column(name = "fecha_publicacion", nullable = false)
     private String fechaPublicacion;
+
+    @Column(nullable = false)
     private String duracion;
+
+    @Column(nullable = false)
     private String director;
+
+    @Column(nullable = false)
     private String escritor;
+
+    @Column(nullable = false)
     private String actores;
+
+    @Column(nullable = false)
     private String sinopsis;
-    private String lenguaje;
+
+    @Column(nullable = false)
+    private String idioma;
+
+    @Column(nullable = false)
     private String pais;
+
+    @Column
     private String premios;
+
+    @Column(nullable = false)
     private String imagen;
+
+    @Column(name = "total_temporadas", nullable = false)
     private Integer totalTemporadas;
+
+    @Column(nullable = false)
     private Double evaluacion;
+
+    @Column(name = "total_votos", nullable = false)
     private String totalVotos;
 
+    @Enumerated(EnumType.STRING)
     private Categoria genero;
 
     public DatosSerie(Serie serie) {
-        this.year = serie.year();
+        this.año = serie.año();
         this.titulo = serie.titulo();
         this.calificada = serie.calificada();
         this.fechaPublicacion = serie.fechaPublicacion();
@@ -37,7 +77,7 @@ public class DatosSerie {
         // Sinopsis traducida
         this.sinopsis = traducirSinopsis(serie.sinopsis());
 
-        this.lenguaje = serie.lenguaje();
+        this.idioma = serie.idioma();
         this.pais = serie.pais();
         this.premios = serie.premios();
         this.imagen = serie.imagen();
@@ -55,7 +95,7 @@ public class DatosSerie {
     public String toString() {
         return "\nDATOS SERIE: " +
                 "\nTitulo: " + titulo +
-                "\nYear: " + year +
+                "\nYear: " + año +
                 "\nCalificada: " + calificada +
                 "\nFecha de publicacion: " + fechaPublicacion +
                 "\nDuracion: " + duracion +
@@ -63,7 +103,7 @@ public class DatosSerie {
                 "\nEscritor: " + escritor +
                 "\nActores: " + actores +
                 "\nSinopsis: " + sinopsis +
-                "\nLenguaje: " + lenguaje +
+                "Idioma: " + idioma +
                 "\nPais: " + pais +
                 "\nPremios: " + premios +
                 "\nImagen: " + imagen +
@@ -80,6 +120,14 @@ public class DatosSerie {
         return responseData.getCandidates().get(0).getContent().getParts().get(0).getText();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -89,11 +137,11 @@ public class DatosSerie {
     }
 
     public String getYear() {
-        return year;
+        return año;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setYear(String año) {
+        this.año = año;
     }
 
     public String getcalificada() {
@@ -153,11 +201,11 @@ public class DatosSerie {
     }
 
     public String getLenguaje() {
-        return lenguaje;
+        return idioma;
     }
 
-    public void setLenguaje(String lenguaje) {
-        this.lenguaje = lenguaje;
+    public void setLenguaje(String idioma) {
+        this.idioma = idioma;
     }
 
     public String getPais() {

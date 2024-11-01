@@ -10,7 +10,7 @@ public record Serie(
         String titulo,
 
         @JsonAlias("Year")
-        String year,
+        String año,
 
         @JsonAlias("Rated")
         String calificada,
@@ -37,7 +37,7 @@ public record Serie(
         String sinopsis,
 
         @JsonAlias("Language")
-        String lenguaje,
+        String idioma,
 
         @JsonAlias("Country")
         String pais,
@@ -62,7 +62,7 @@ public record Serie(
         public String toString() {
                 return "\nSERIE: " +
                         "\nTitulo: " + titulo +
-                        "\nAño: " + year +
+                        "\nAño: " + año +
                         "\ncalificada: " + calificada +
                         "\nFecha de publicacion: " + fechaPublicacion +
                         "\nDuracion: " + duracion +
@@ -71,7 +71,7 @@ public record Serie(
                         "\nEscritor: " + escritor +
                         "\nActores: " + actores +
                         "\nSinopsis: " + sinopsis +
-                        "\nLenguaje: " + lenguaje +
+                        "Idioma: " + idioma +
                         "\nPais: " + pais +
                         "\nPremios: " + premios +
                         "\nImagen: " + imagen +
