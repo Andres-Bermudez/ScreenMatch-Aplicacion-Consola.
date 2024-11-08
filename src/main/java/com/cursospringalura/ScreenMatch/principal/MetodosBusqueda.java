@@ -2,6 +2,8 @@ package com.cursospringalura.ScreenMatch.principal;
 
 import com.cursospringalura.ScreenMatch.autenticacion.DatosAutenticacion;
 import com.cursospringalura.ScreenMatch.modelos.*;
+import com.cursospringalura.ScreenMatch.repository.DatosSerieRepository;
+import com.cursospringalura.ScreenMatch.repository.EpisodiosRepository;
 import com.cursospringalura.ScreenMatch.servicios.ConsultaOMDb;
 import com.cursospringalura.ScreenMatch.conversiondatos.ConvertirDatos;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,20 +12,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// Esta clase realiza las solicitudes necesarias a la API para obtener los datos.
 public class MetodosBusqueda extends DatosAutenticacion {
 
-    private final static ConvertirDatos convertirDatos = new ConvertirDatos();
-    private final static ConsultaOMDb consultaOmdb = new ConsultaOMDb();
-    private final static DatosAutenticacion datosAutenticacion = new DatosAutenticacion();
-    private final static String urlBase = "https://www.omdbapi.com/?t=";
-    private final static String apiKey = datosAutenticacion.getApiKey();
-    private final static List<DatosSerie> seriesBuscadas = new ArrayList<>();
+    private ConvertirDatos convertirDatos = new ConvertirDatos();
+    private ConsultaOMDb consultaOmdb = new ConsultaOMDb();
+    private DatosAutenticacion datosAutenticacion = new DatosAutenticacion();
+    private String urlBase = "https://www.omdbapi.com/?t=";
+    private String apiKey = datosAutenticacion.getApiKey();
+    // private List<DatosSerie> seriesBuscadas = new ArrayList<>(); Se cambio por una base de datos.
+    private DatosSerieRepository datosSerieRepository;
+    private EpisodiosRepository episodiosRepository;
 
-    public static Serie buscarDatosGeneralesSerie(String nombreSerie) {
+    public MetodosBusqueda(DatosSerieRepository datosSerieRepository, EpisodiosRepository episodiosRepository) {
+        this.datosSerieRepository = datosSerieRepository;
+        this.episodiosRepository = episodiosRepository;
+    }
+
+    public Serie buscarDatosGeneralesSerie(String nombreSerie) {
+        // Endpoint al que hacemos la solicitud
         String url = urlBase + nombreSerie + "&apikey=" + apiKey;
 
         // Busqueda de los datos generales de la serie
-        String json = consultaOmdb.obtenerDatos(url);
+        String json = consultaOmdb.obtenerDatos(url); // Consulta a la API
 
         // Procedimiento para convertir el JSON en un objeto Java
         ObjectMapper objectMapper = new ObjectMapper();
@@ -34,16 +45,21 @@ public class MetodosBusqueda extends DatosAutenticacion {
 
             // Conversion del objeto para almacenarlo con algunas cambios como traduccion de sus datos.
             DatosSerie datosSerie = new DatosSerie(serie);
-            seriesBuscadas.add(datosSerie); // Añadir el objeto a una ArrayList.
+            // seriesBuscadas.add(datosSerie); // Añadir el objeto a una ArrayList.
+
+            // Para almacenar la serie buscada en la base de datos.
+            // Ya no la guardaremos en un ArrayList. Revisar linea anterior.
+            DatosSerie serieParaAlmacenar = new DatosSerie(serie);
+            datosSerieRepository.save(serieParaAlmacenar);
 
         } catch (Exception e) {
             System.out.println("\nNo se pudo convertir el JSON de la serie en el objeto solicitado.");
-            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return convertirDatos.obtenerDatos(json, Serie.class);
     }
 
-    public static List<Temporada> buscarDatosSeriePorTemporada(String nombreSerie) {
+    public List<Temporada> buscarDatosSeriePorTemporada(String nombreSerie) {
         Serie serie = buscarDatosGeneralesSerie(nombreSerie);
 
         List<Temporada> temporadas = new ArrayList<>();
@@ -56,12 +72,13 @@ public class MetodosBusqueda extends DatosAutenticacion {
             }
         } catch (NullPointerException e) {
             System.out.println("\nEsta serie contiene datos incompletos.");
+            System.out.println(e.getMessage());
             System.exit(0);
         }
         return temporadas;
     }
 
-    public static void verTop5Episodios(String nombreSerie) {
+    public void verTop5Episodios(String nombreSerie) {
         // Convertir toda la informacion a una lista de tipo DatosEpisodio
         List<DatosEpisodio> datosEpisodios = buscarDatosSeriePorTemporada(nombreSerie).stream()
                 .flatMap(t -> t.episodios().stream()).toList();
@@ -75,7 +92,7 @@ public class MetodosBusqueda extends DatosAutenticacion {
                 .forEach(System.out::println);
     }
 
-    public static List<Episodio> verDatosDeTodosLosEpisodios(String nombreSerie) {
+    public List<Episodio> verDatosDeTodosLosEpisodios(String nombreSerie) {
         // Convirtiendo los datos a una lista de tipo Episodio
         List<Episodio> episodios = buscarDatosSeriePorTemporada(nombreSerie).stream()
                 .flatMap(t -> t.episodios().stream()
@@ -85,7 +102,7 @@ public class MetodosBusqueda extends DatosAutenticacion {
         return episodios;
     }
 
-    public static void buscarEpisodiosDeUnaSeriePorFecha(String nombreSerie) {
+    public void buscarEpisodiosDeUnaSeriePorFecha(String nombreSerie) {
         Scanner sc = new Scanner(System.in);
         int año = 0;
 
@@ -94,6 +111,7 @@ public class MetodosBusqueda extends DatosAutenticacion {
             año = sc.nextInt();
         } catch (InputMismatchException e) {
             System.out.println("\nEl año que ingresaste no es valido.");
+            System.out.println("Error: " + e.getMessage());
         }
         List<Episodio> episodios = verDatosDeTodosLosEpisodios(nombreSerie);
         LocalDate fechaBusqueda = LocalDate.of(año, 1, 1);
@@ -110,25 +128,26 @@ public class MetodosBusqueda extends DatosAutenticacion {
                 ));
     }
 
-    public static void busquedaEpisodioPorFraccionTitulo(String nombreSerie) {
+    public void busquedaEpisodioPorFraccionTitulo(String nombreSerie) {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("\nEscribe el episodio que estas buscando: ");
         String episodioBuscado = sc.nextLine();
 
         // Filtrando la primera coincidencia del titulo encontrado
-        Optional<Episodio> episodioEncontrado = verDatosDeTodosLosEpisodios(nombreSerie).stream()
-                .filter(e -> e.getTitulo().toUpperCase().contains(episodioBuscado.toUpperCase()))
+        Optional<Episodio> episodioConsultado = verDatosDeTodosLosEpisodios(nombreSerie).stream()
+                .filter(e -> e.getTitulo().toLowerCase().contains(episodioBuscado.toLowerCase()))
                 .findFirst();
 
-        if (episodioEncontrado.isPresent()) {
-            System.out.println("\nEpisodio Encontrado: \n" + episodioEncontrado.get());
+        if (episodioConsultado.isPresent()) {
+            var episodioEncontrado = episodioConsultado.get();
+            System.out.println("\nEpisodio Encontrado: \n" + episodioEncontrado);
         } else {
             System.out.println("\nEl episodio NO fue encontrado.");
         }
     }
 
-    public static void evaluacionesPorTemporada(String nombreSerie) {
+    public void evaluacionesPorTemporada(String nombreSerie) {
         Map<Integer, Double> evaluaciones = verDatosDeTodosLosEpisodios(nombreSerie).stream()
                 .filter(e -> e.getEvaluacion() > 0)
                 .collect(Collectors.groupingBy(Episodio::getTemporada,
@@ -143,7 +162,7 @@ public class MetodosBusqueda extends DatosAutenticacion {
         }
     }
 
-    public static void verEstadisticasSerie(String nombreSerie) {
+    public void verEstadisticasSerie(String nombreSerie) {
         DoubleSummaryStatistics statistics = verDatosDeTodosLosEpisodios(nombreSerie).stream()
                 .filter(e -> e.getEvaluacion() > 0)
                 .collect(Collectors.summarizingDouble(Episodio::getEvaluacion));
@@ -153,7 +172,10 @@ public class MetodosBusqueda extends DatosAutenticacion {
                 + "\nCalificacion mas baja obtenida de un episodio: " + statistics.getMin());
     }
 
-    public static void consultasAlmacenadas() {
+    public void consultasAlmacenadas() {
+        // Este metodo realiza una consulta SQL a nuestra base de datos y nos retorna
+        // las series consultadas por el usuario.
+        List<DatosSerie> seriesBuscadas = datosSerieRepository.findAll();
         if (seriesBuscadas.isEmpty()) {
             System.out.println("\nLa lista de datos esta vacia.");
         } else {

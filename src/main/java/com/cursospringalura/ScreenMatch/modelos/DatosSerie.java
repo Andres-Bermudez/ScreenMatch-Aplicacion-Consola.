@@ -3,26 +3,27 @@ package com.cursospringalura.ScreenMatch.modelos;
 import com.cursospringalura.ScreenMatch.servicios.gemini.ConsultaGemini;
 import com.cursospringalura.ScreenMatch.servicios.gemini.modelos.ResponseData;
 import jakarta.persistence.*;
+import java.util.List;
 import java.util.OptionalDouble;
 
-@Entity
-@Table(name = "series")
+@Entity // Indica que esta clase sera una entidad(Tabla) en nuestra base de datos.
+@Table(name = "series") // Indica que esta tabla en la base de datos se llamara "series".
 public class DatosSerie {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Indica que este atributo sera la PRIMARY KEY de nuestra tabla.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Indica que JPA se encargara de que esta columna autoincrementara con cada registro.
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true) // Indica que este atributo sera una columna de nuestra tabla y se le agregan las constraints.
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // Indica que este atributo sera una columna de nuestra tabla y se le agregan las constraints.
     private String año;
 
-    @Column
+    @Column // Indica que este atributo sera una columna en la tabla con este mismo nombre.
     private String calificada;
 
-    @Column(name = "fecha_publicacion", nullable = false)
+    @Column(name = "fecha_publicacion", nullable = false) // Indica que este atributo sera una columna de nuestra tabla y se le agregan las constraints.
     private String fechaPublicacion;
 
     @Column(nullable = false)
@@ -61,8 +62,16 @@ public class DatosSerie {
     @Column(name = "total_votos", nullable = false)
     private String totalVotos;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // Indica que estamos trabajando con tipos de datos ENUM.
     private Categoria genero;
+
+    @OneToMany(mappedBy = "serie") // Indica que este atributo tiene relacion de uno a muchos con la tabla "episodios".
+    private List<Episodio> episodios;
+
+    // Constructor por defecto
+    public DatosSerie() {
+
+    }
 
     public DatosSerie(Serie serie) {
         this.año = serie.año();
@@ -75,7 +84,7 @@ public class DatosSerie {
         this.actores = serie.actores();
 
         // Sinopsis traducida
-        this.sinopsis = traducirSinopsis(serie.sinopsis());
+        this.sinopsis = traducirSinopsis(serie.sinopsis()); // Llama al metodo que traduce la sinopsis a español.
 
         this.idioma = serie.idioma();
         this.pais = serie.pais();
@@ -87,11 +96,11 @@ public class DatosSerie {
         this.evaluacion = OptionalDouble.of(Double.parseDouble(serie.evaluacion())).orElse(0);
         this.totalVotos = serie.totalVotos();
 
-        // Parseando genero, de String a un tipo de dato Categoria.
+        // Parseando atributo genero, de String a un tipo de dato Categoria.
         this.genero = Categoria.fromString(serie.genero().split(",")[0].trim());
     }
 
-    @Override
+    @Override // Indica que estamos sobreescribiendo este metodo.
     public String toString() {
         return "\nDATOS SERIE: " +
                 "\nTitulo: " + titulo +
@@ -113,6 +122,7 @@ public class DatosSerie {
                 "\nGenero: " + genero;
     }
 
+    // Metodo que traduce la sinopsis de cada serie a español por medio de inteligencia artificial (Gemini)
     private String traducirSinopsis(String sinopsisSinTraducir) {
         ConsultaGemini consultaGemini = new ConsultaGemini();
         ResponseData responseData = consultaGemini.enviarSolicitud("Traduce el siguiente " +

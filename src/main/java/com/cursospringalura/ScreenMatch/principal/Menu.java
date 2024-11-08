@@ -1,9 +1,17 @@
 package com.cursospringalura.ScreenMatch.principal;
 
 import com.cursospringalura.ScreenMatch.autenticacion.DatosAutenticacion;
+import com.cursospringalura.ScreenMatch.repository.DatosSerieRepository;
+import com.cursospringalura.ScreenMatch.repository.EpisodiosRepository;
 import java.util.*;
 
 public class Menu extends DatosAutenticacion {
+
+    private MetodosBusqueda metodosBusqueda;
+
+    public Menu(DatosSerieRepository datosSerieRepository, EpisodiosRepository episodiosRepository) {
+        this.metodosBusqueda = new MetodosBusqueda(datosSerieRepository, episodiosRepository);
+    }
 
     public void mostrarMenu() {
         Scanner sc = new Scanner(System.in);
@@ -38,38 +46,38 @@ public class Menu extends DatosAutenticacion {
                 break;
             case 1:
                 System.out.println("\nBuscando serie.....");
-                System.out.println(MetodosBusqueda.buscarDatosGeneralesSerie(tomarNombreSerie()));
+                System.out.println(metodosBusqueda.buscarDatosGeneralesSerie(tomarNombreSerie()));
                 break;
             case 2:
                 System.out.println("\nBuscando datos de las temporadas de la serie.....");
-                MetodosBusqueda.buscarDatosSeriePorTemporada(tomarNombreSerie()).forEach(System.out::println);
+                metodosBusqueda.buscarDatosSeriePorTemporada(tomarNombreSerie()).forEach(System.out::println);
                 break;
             case 3:
                 System.out.println("\nBuscando top 5 episodios de una serie.....");
-                MetodosBusqueda.verTop5Episodios(tomarNombreSerie());
+                metodosBusqueda.verTop5Episodios(tomarNombreSerie());
                 break;
             case 4:
                 System.out.println("\nBuscando datos de todos los episodios de la serie.....");
-                MetodosBusqueda.verDatosDeTodosLosEpisodios(tomarNombreSerie()).forEach(System.out::println);
+                metodosBusqueda.verDatosDeTodosLosEpisodios(tomarNombreSerie()).forEach(System.out::println);
                 break;
             case 5:
                 System.out.println("\nBuscando datos de una serie por fecha.....");
-                MetodosBusqueda.buscarEpisodiosDeUnaSeriePorFecha(tomarNombreSerie());
+                metodosBusqueda.buscarEpisodiosDeUnaSeriePorFecha(tomarNombreSerie());
                 break;
             case 6:
                 System.out.println("\nBuscando primera coincidencia en la serie.....");
-                MetodosBusqueda.busquedaEpisodioPorFraccionTitulo(tomarNombreSerie());
+                metodosBusqueda.busquedaEpisodioPorFraccionTitulo(tomarNombreSerie());
                 break;
             case 7:
                 System.out.println("\nBuscando calificacion de la serie.....");
-                MetodosBusqueda.evaluacionesPorTemporada(tomarNombreSerie());
+                metodosBusqueda.evaluacionesPorTemporada(tomarNombreSerie());
                 break;
             case 8:
                 System.out.println("\nCalculando datos de la serie.....");
-                MetodosBusqueda.verEstadisticasSerie(tomarNombreSerie());
+                metodosBusqueda.verEstadisticasSerie(tomarNombreSerie());
                 break;
             case 9:
-                MetodosBusqueda.consultasAlmacenadas();
+                metodosBusqueda.consultasAlmacenadas();
                 break;
             default:
                 System.out.println("\nLa opcion que elegiste no existe");

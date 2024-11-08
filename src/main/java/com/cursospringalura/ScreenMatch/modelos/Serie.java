@@ -3,10 +3,12 @@ package com.cursospringalura.ScreenMatch.modelos;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+// Esta anotacion indica que ignora los demas datos traidos por la API y que
+// solo tiene en cuenta los atributos que declaramos en esta clase.
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Serie(
 
-        @JsonAlias("Title")
+        @JsonAlias("Title") // Indica que este atributo llega de la API con este nombre.
         String titulo,
 
         @JsonAlias("Year")
