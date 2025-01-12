@@ -1,69 +1,95 @@
-# ScreenMatch 
+# 🎬 ScreenMatch 
 
 ![Consultando datos serie](./imagenes/inicio.png)
 
-## Descripcion:
-Primer proyecto en Java con Spring Boot del curso de Alura, programa
-ONE (Oracle Next Education):
+## Descripción:
+📦 Primer proyecto en Java con Spring Boot del curso de Alura,
+programa ONE (Oracle Next Education):
 
-Esta aplicación desarrollada en Java con Spring Boot permite realizar búsquedas 
-de series mediante la API de OMDb (https://www.omdbapi.com) para obtener sus datos. 
+☕ Esta aplicación desarrollada en Java con Spring Boot permite
+realizar búsquedas de series mediante la API de OMDb
+(🌐 https://www.omdbapi.com) para obtener sus datos.
 
-Con esta herramienta, los usuarios pueden buscar series por nombre, realizar búsquedas por fecha, 
-visualizar estadísticas de cada temporada, consultar el top 5 de episodios 
-mejor calificados de una serie, entre otras funciones similares. 
+🔎 Con esta herramienta, los usuarios pueden:
 
-Además, se emplean técnicas de programación funcional y se aprovecha la API de Streams de Java, 
-permitiendo ejecutar operaciones intermedias y convertir los resultados en 
-colecciones específicas para facilitar el filtrado y búsqueda de series.
-<br><br>
+📺 Buscar series por nombre.
 
-- #### Informacion de todos los episodios de una serie:
+📆 Realizar búsquedas por fecha.
+
+📊 Visualizar estadísticas de cada temporada.
+
+
+🏆 Consultar el top 5 de episodios mejor calificados de una serie.
+
+➕ Y otras funciones similares.
+
+🧩 Además, se emplean técnicas de programación funcional y se
+aprovecha la API de Streams de Java, permitiendo ejecutar
+operaciones intermedias y convertir los resultados en colecciones
+específicas para facilitar el filtrado y búsqueda de series. 🚀
+
+- Informacion de todos los episodios de una serie:
 ![Informacion Episodios](./imagenes/episodiosSerie.png)
 
-## Objetivos:
+## 🎯 Objetivos:
+🛠️ Creación de proyectos con Spring Initializr:
 
-#### Creacion de proyectos con Spring Initializr:
-- Creacion de un proyecto con Spring Boot, agregando Maven como gestor de
-dependencias, versiones y metadatos.
+🏗️ Creación de un proyecto con Spring Boot, agregando Maven como
+gestor de dependencias, versiones y metadatos.
 
-#### Consumo de la API de OMDb: 
-https://www.omdbapi.com
-- Implementación de solicitudes HTTP para interactuar con la API.
+🌐 Consumo de la API de OMDb:
 
-#### Estructuras de Datos y Formato JSON: 
-- Manejo y procesamiento de datos en formato JSON con la biblioteca Jackson.
+🔗 Consumo de la API de OMDb: https://www.omdbapi.com
 
-#### Introducción a la Programación Funcional en Java: 
-- Aplicación de streams para manipular colecciones de datos de manera eficiente.
+📡 Implementación de solicitudes HTTP para interactuar con la API.
 
-#### Uso de bibliotecas para manipulacion de datos y calculo de estadisticas:
-- DateTimeFormatter
-- Optional
-- DoubleSummaryStatistics
-<br><br>
+📦 Estructuras de Datos y Formato JSON:
 
-- #### Busqueda de datos de una serie por fecha:
+🧩 Manejo y procesamiento de datos en formato JSON con la
+biblioteca Jackson.
+
+🧑‍💻 Introducción a la Programación Funcional en Java:
+
+🔀 Aplicación de streams para manipular colecciones de datos de
+manera eficiente.
+
+📊 Uso de bibliotecas para manipulación de datos y cálculo de
+estadísticas:
+
+📅 DateTimeFormatter
+
+🧐 Optional
+
+📈 DoubleSummaryStatistics
+
+- Busqueda de datos de una serie por fecha:
 ![Busqueda por fecha](./imagenes/busquedaPorFecha.png)
 
-### Tecnologias y herramientas utilizadas:
-1. Java como lenguaje de programacion.
-2. Maven como gestor de dependencias.
-3. Spring Boot.
-4. Spring Data
-5. Java Persistence API.
-6. Hibernate
-7. Postman para ejecutar pruebas a la API.
-8. Git y GitHub para el control de versiones.
-9. API de OMDb para obtener los datos.
-10. PostgreSQL como base de datos.
-<br><br>
+## 🧰 Tecnologías y herramientas utilizadas:
 
-- #### Busqueda de un episodio por la primera coincidencia encontrada:
+☕ Java como lenguaje de programación.
+
+📦 Maven como gestor de dependencias.
+
+🚀 Spring Boot.
+
+🗃️ Spring Data.
+
+🛠️ Java Persistence API (JPA).
+
+🔧 Hibernate.
+
+📡 Postman para ejecutar pruebas a la API.
+
+🌐 Git y GitHub para el control de versiones.
+
+🎬 API de OMDb para obtener los datos.
+
+🗄️ PostgreSQL como base de datos.
+
+- Busqueda de un episodio por la primera coincidencia encontrada:
 ![Busqueda por primera coincidencia](./imagenes/busquedaPrimeraCoincidenciaEpisodio.png)
 
-
-
-- ### Certificado del curso:
+- Certificado del curso:
 ![Certificado curso](./imagenes/CursoIntroduccionSpringBootProgramacionFuncionalAlura.png)
 
